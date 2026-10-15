@@ -1,0 +1,1121 @@
+/* Антракт: афиша и продажа билетов. Палитра из цветов флага Казахстана:
+   небесно-голубой, золото и тёмно-синие чернила. Главный образ: билет с перфорацией. */
+
+:root {
+    --ink: #0b2433;
+    --ink-soft: #1b3a4d;
+    --sky: #00afca;
+    --sky-deep: #00788d;
+    --gold: #fec50c;
+    --gold-deep: #e8b000;
+    --page: #e4f2f6;
+    --paper: #ffffff;
+    --line: #bcd6de;
+    --muted: #46636f;
+    --danger: #b42318;
+    --ok: #0b6b3a;
+
+    --r: 18px;
+    --r-sm: 12px;
+
+    --font-display: "Unbounded", "Onest", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Onest", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.55;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+img,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: var(--sky-deep);
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+:focus-visible {
+    outline: 3px solid var(--sky-deep);
+    outline-offset: 3px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.wrap {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+main {
+    flex: 1;
+    padding: 36px 0 72px;
+}
+
+/* ---------- Шапка ---------- */
+
+.site-header {
+    background: var(--ink);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.site-header :focus-visible {
+    outline-color: var(--gold);
+}
+
+.site-header__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 64px;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.01em;
+}
+
+.logo svg {
+    width: 30px;
+    height: 21px;
+    fill: var(--gold);
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.nav__link {
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-bottom: 3px solid transparent;
+}
+
+.nav__link:hover {
+    color: #fff;
+}
+
+.nav__link.is-active {
+    color: #fff;
+    border-bottom-color: var(--gold);
+}
+
+.nav__cta {
+    margin-left: 8px;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border: 2px solid var(--gold);
+    border-radius: var(--r-sm);
+}
+
+.nav__cta:hover {
+    background: var(--gold);
+    color: var(--ink);
+}
+
+/* ---------- Кнопки ---------- */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border: 2px solid transparent;
+    border-radius: var(--r-sm);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.2;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn--gold {
+    background: var(--gold);
+    color: var(--ink);
+}
+
+.btn--gold:hover {
+    background: var(--gold-deep);
+}
+
+.btn--ink {
+    background: var(--ink);
+    color: #fff;
+}
+
+.btn--ink:hover {
+    background: var(--ink-soft);
+}
+
+.btn--ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ink);
+}
+
+.btn--ghost:hover {
+    background: var(--ink);
+    color: #fff;
+}
+
+.btn--wide {
+    width: 100%;
+    padding: 15px 22px;
+    font-size: 1.05rem;
+}
+
+.btn--small {
+    padding: 8px 16px;
+}
+
+.btn[disabled],
+.btn--disabled {
+    background: #cfdde2;
+    color: #587480;
+    border-color: transparent;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ---------- Первый экран ---------- */
+
+.hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 48px;
+    align-items: center;
+    padding: 12px 0 44px;
+}
+
+.hero__title {
+    font-size: clamp(1.9rem, 4.1vw, 3.1rem);
+    letter-spacing: -0.015em;
+    max-width: 16em;
+}
+
+.hero__lead {
+    margin-top: 20px;
+    max-width: 34em;
+    font-size: 1.1rem;
+    color: var(--muted);
+}
+
+.hero__actions {
+    margin-top: 28px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.hero__ticket {
+    transform: rotate(1.6deg);
+    max-width: 420px;
+    margin-left: auto;
+    width: 100%;
+}
+
+.page-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.page-head h1 {
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+}
+
+.page-head__note {
+    color: var(--muted);
+}
+
+/* ---------- Фильтры ---------- */
+
+.catalog-head {
+    margin-bottom: 24px;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 240px auto;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.js .filters {
+    grid-template-columns: minmax(0, 1fr) 240px;
+}
+
+.js .filters__submit {
+    display: none;
+}
+
+.field {
+    display: block;
+    position: relative;
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    padding: 13px 14px;
+    border: 2px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    line-height: 1.3;
+}
+
+.field textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    outline: none;
+    border-color: var(--sky-deep);
+    box-shadow: 0 0 0 3px rgba(0, 175, 202, 0.25);
+}
+
+.field--search svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    transform: translateY(-50%);
+    stroke: var(--muted);
+    fill: none;
+    pointer-events: none;
+}
+
+.field--search input {
+    padding-left: 44px;
+}
+
+.field.has-error input,
+.field.has-error select,
+.field.has-error textarea {
+    border-color: var(--danger);
+}
+
+.field__label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.field__hint {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+.field__error {
+    margin-top: 6px;
+    color: var(--danger);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.field__error:empty {
+    display: none;
+}
+
+.chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 2px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.chip:hover {
+    border-color: var(--ink);
+}
+
+.chip.is-active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+}
+
+.chip__count {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.chip.is-active .chip__count {
+    color: var(--gold);
+}
+
+/* ---------- Сетка билетов ---------- */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 32px 26px;
+}
+
+.grid[aria-busy="true"] {
+    opacity: 0.55;
+}
+
+.empty {
+    grid-column: 1 / -1;
+    background: var(--paper);
+    border: 2px dashed var(--line);
+    border-radius: var(--r);
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.empty h2 {
+    font-size: 1.3rem;
+}
+
+.empty p {
+    margin: 10px auto 22px;
+    max-width: 30em;
+    color: var(--muted);
+}
+
+/* ---------- Билет ---------- */
+
+.ticket {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    border-radius: var(--r);
+    box-shadow: 0 1px 0 var(--line), 0 14px 26px -18px rgba(11, 36, 51, 0.55);
+}
+
+.ticket__body {
+    padding: 18px 20px 20px;
+    flex: 1;
+}
+
+.ticket__title {
+    font-size: 1.1rem;
+    line-height: 1.25;
+}
+
+.ticket__title a {
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.ticket__title a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+.ticket__meta {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.ticket__meta--when {
+    margin-top: 10px;
+    color: var(--ink);
+    font-weight: 500;
+}
+
+.ticket__countdown {
+    margin-top: 14px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: var(--page);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.ticket__countdown:empty {
+    display: none;
+}
+
+/* Линия отрыва с вырезами по краям */
+
+.ticket__tear {
+    position: relative;
+    height: 2px;
+    margin: 0;
+    background: repeating-linear-gradient(90deg, var(--line) 0 8px, transparent 8px 14px);
+}
+
+.ticket__tear::before,
+.ticket__tear::after {
+    content: "";
+    position: absolute;
+    top: -11px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--page);
+}
+
+.ticket__tear::before {
+    left: -11px;
+}
+
+.ticket__tear::after {
+    right: -11px;
+}
+
+.ticket__stub {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px 18px;
+}
+
+.ticket__price {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    line-height: 1.2;
+}
+
+.ticket__left {
+    display: block;
+    margin-top: 2px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.ticket__left.is-low {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+/* Обложка билета: узор зависит от категории */
+
+.art {
+    --bg: var(--ink);
+    --fg: #fff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 168px;
+    padding: 16px 20px;
+    overflow: hidden;
+    isolation: isolate;
+    color: var(--fg);
+    text-decoration: none;
+    background-color: var(--bg);
+    border-radius: var(--r) var(--r) 0 0;
+}
+
+.art--concert {
+    --bg: #0b2433;
+    --fg: #ffffff;
+    background-image: repeating-radial-gradient(circle at 80% 30%, transparent 0 14px, rgba(0, 175, 202, 0.6) 14px 16px);
+}
+
+.art--theatre {
+    --bg: #8e1b3c;
+    --fg: #ffffff;
+    background-image:
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 40%, rgba(0, 0, 0, 0.28)),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0 22px, transparent 22px 44px);
+}
+
+.art--festival {
+    --bg: #fec50c;
+    --fg: #0b2433;
+    background-image: repeating-conic-gradient(from 0deg at 80% 30%, rgba(11, 36, 51, 0.14) 0 10deg, transparent 10deg 20deg);
+}
+
+.art--exhibition {
+    --bg: #00afca;
+    --fg: #0b2433;
+    background-image:
+        linear-gradient(rgba(11, 36, 51, 0.24) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11, 36, 51, 0.24) 1px, transparent 1px);
+    background-size: 28px 28px;
+}
+
+.art--cinema {
+    --bg: #0b2433;
+    --fg: #ffffff;
+    background-image:
+        repeating-linear-gradient(90deg, transparent 0 18px, #fec50c 18px 30px),
+        repeating-linear-gradient(90deg, transparent 0 18px, #fec50c 18px 30px);
+    background-size: 100% 10px, 100% 10px;
+    background-position: 0 0, 0 100%;
+    background-repeat: no-repeat;
+}
+
+.art--lecture {
+    --bg: #bfe3ea;
+    --fg: #0b2433;
+    background-image: radial-gradient(rgba(11, 36, 51, 0.35) 1.5px, transparent 1.7px);
+    background-size: 16px 16px;
+}
+
+.ticket__chip {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--fg);
+    color: var(--bg);
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.ticket__day {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 3.4rem;
+    line-height: 0.95;
+}
+
+.ticket__month {
+    margin-top: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.ticket--feature .art {
+    min-height: 200px;
+}
+
+.ticket--feature .ticket__title {
+    font-size: 1.35rem;
+}
+
+/* Широкий билет: список заказов и страница билета */
+
+@media (min-width: 760px) {
+    .ticket--wide {
+        display: grid;
+        grid-template-columns: 200px minmax(0, 1fr) 2px auto;
+    }
+
+    .ticket--wide .art {
+        border-radius: var(--r) 0 0 var(--r);
+        min-height: 100%;
+    }
+
+    .ticket--wide .ticket__tear {
+        width: 2px;
+        height: auto;
+        background: repeating-linear-gradient(180deg, var(--line) 0 8px, transparent 8px 14px);
+    }
+
+    .ticket--wide .ticket__tear::before,
+    .ticket--wide .ticket__tear::after {
+        left: -10px;
+        right: auto;
+    }
+
+    .ticket--wide .ticket__tear::before {
+        top: -11px;
+    }
+
+    .ticket--wide .ticket__tear::after {
+        top: auto;
+        bottom: -11px;
+    }
+
+    .ticket--wide .ticket__stub {
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        min-width: 210px;
+        padding: 20px 24px;
+    }
+}
+
+.ticket__code {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+}
+
+.ticket__code-label {
+    display: block;
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-bottom: 2px;
+}
+
+.orders {
+    display: grid;
+    gap: 28px;
+}
+
+/* ---------- Страница мероприятия ---------- */
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.event {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 44px;
+    align-items: start;
+}
+
+.event__art {
+    min-height: 240px;
+    border-radius: var(--r);
+    padding: 24px 28px;
+}
+
+.event__art .ticket__chip {
+    top: 22px;
+    left: 28px;
+    font-size: 0.95rem;
+}
+
+.event__art .ticket__day {
+    font-size: 5.2rem;
+}
+
+.event__art .ticket__month {
+    font-size: 1.25rem;
+}
+
+.event__title {
+    margin-top: 28px;
+    font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+    letter-spacing: -0.01em;
+}
+
+.facts {
+    margin: 28px 0 0;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.facts dt {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.facts dd {
+    margin: 2px 0 0;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.prose {
+    margin-top: 32px;
+    max-width: 62ch;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    white-space: pre-line;
+}
+
+.buy {
+    position: sticky;
+    top: 88px;
+    background: var(--paper);
+    border-radius: var(--r);
+    box-shadow: 0 1px 0 var(--line), 0 14px 26px -18px rgba(11, 36, 51, 0.55);
+}
+
+.buy__top {
+    padding: 24px 24px 22px;
+    display: grid;
+    gap: 16px;
+}
+
+.buy__title {
+    font-size: 1.2rem;
+}
+
+.buy__bottom {
+    padding: 20px 24px 24px;
+    display: grid;
+    gap: 14px;
+}
+
+.buy__total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.buy__total strong {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+}
+
+.buy__note {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.buy__closed {
+    padding: 28px 24px;
+    display: grid;
+    gap: 12px;
+}
+
+.qty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.qty__label {
+    font-weight: 600;
+}
+
+.qty__ctrl {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid var(--line);
+    border-radius: var(--r-sm);
+    overflow: hidden;
+}
+
+.qty__btn {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: var(--page);
+    color: var(--ink);
+    font: inherit;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.qty__btn:hover:not([disabled]) {
+    background: var(--gold);
+}
+
+.qty__btn[disabled] {
+    color: #8aa3ad;
+    cursor: not-allowed;
+}
+
+.qty__value {
+    min-width: 52px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.form-status {
+    min-height: 1.4em;
+    font-weight: 600;
+}
+
+.form-status.is-error {
+    color: var(--danger);
+}
+
+.form-status.is-ok {
+    color: var(--ok);
+}
+
+.related {
+    margin-top: 64px;
+}
+
+.related h2 {
+    font-size: 1.4rem;
+    margin-bottom: 24px;
+}
+
+/* ---------- Билеты и формы ---------- */
+
+.banner {
+    margin: 0 0 28px;
+    padding: 16px 20px;
+    border-radius: var(--r-sm);
+    background: var(--gold);
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.banner span {
+    display: block;
+    margin-top: 2px;
+    font-weight: 400;
+}
+
+.lookup {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin: 28px 0 36px;
+}
+
+.lookup .field {
+    flex: 1 1 260px;
+    max-width: 380px;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+}
+
+.form-card {
+    max-width: 760px;
+    background: var(--paper);
+    border-radius: var(--r);
+    padding: 28px;
+    box-shadow: 0 1px 0 var(--line), 0 14px 26px -18px rgba(11, 36, 51, 0.55);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.form-grid .field--full {
+    grid-column: 1 / -1;
+}
+
+.lead {
+    margin-top: 12px;
+    max-width: 40em;
+    color: var(--muted);
+}
+
+/* ---------- Пагинация ---------- */
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 40px;
+}
+
+.pagination__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 42px;
+    padding: 0 14px;
+    border: 2px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--paper);
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a.pagination__item:hover {
+    border-color: var(--ink);
+}
+
+.pagination__item--active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+}
+
+.pagination__item--disabled {
+    color: #8aa3ad;
+    background: transparent;
+}
+
+/* ---------- Подвал ---------- */
+
+.site-footer {
+    border-top: 2px solid var(--line);
+    padding: 24px 0 32px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.site-footer .wrap {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Адаптивность ---------- */
+
+@media (max-width: 960px) {
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .hero__ticket {
+        margin: 0;
+        max-width: 460px;
+    }
+
+    .event {
+        grid-template-columns: 1fr;
+    }
+
+    .buy {
+        position: static;
+    }
+}
+
+@media (max-width: 640px) {
+    main {
+        padding-top: 24px;
+    }
+
+    .filters,
+    .js .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-card {
+        padding: 20px;
+    }
+
+    .event__art .ticket__day {
+        font-size: 4rem;
+    }
+
+    .site-header__row {
+        justify-content: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@media print {
+    .site-header,
+    .site-footer,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: #fff;
+    }
+
+    .ticket {
+        box-shadow: none;
+        border: 1px solid #999;
+    }
+
+    .ticket__tear::before,
+    .ticket__tear::after {
+        background: #fff;
+    }
+}
